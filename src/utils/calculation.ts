@@ -1,3 +1,5 @@
+import { getConfig } from './config';
+
 export type BuildingType = 'detached_house' | 'townhouse' | 'duplex';
 export type Bathrooms = '1' | '2' | '3_plus';
 export type FinishLevel = 'basic' | 'standard' | 'high_end';
@@ -17,56 +19,40 @@ export interface RangeValue {
 }
 
 export interface EstimateResult {
-  wall_height: number;
-  storey_factor: number;
-  external_wall_area: number;
-  internal_wall_factor: number;
-  internal_wall_area: number;
-  ceiling_area: number;
-  total_lining_area: number;
+  wallHeight: number;
+  storeyFactor: number;
+  baseInternalFactor: number;
+  wetAreaFactor: number;
+  externalWallArea: number;
+  internalWallArea: number;
+  wallArea: number;
+  ceilingArea: number;
+  totalLiningArea: number;
   gib: RangeValue;
   stopping: RangeValue;
   paint: RangeValue;
   total: RangeValue;
 }
 
-const WALL_HEIGHT = 2.4;
-const STOREY_FACTOR = 1.5;
-
-const BASE_INTERNAL_FACTOR: Record<BuildingType, number> = {
-  detached_house: 1.6,
-  townhouse: 1.8,
-  duplex: 1.7,
-};
-
-const BATHROOM_ADJUSTMENT: Record<Bathrooms, number> = {
-  '1': 0,
-  '2': 0.05,
-  '3_plus': 0.1,
-};
-
-const UNIT_RATES = {
-  gib: 32,
-  stopping: 12,
-  paint: 22,
-} as const;
-
-const FINISH_FACTOR: Record<FinishLevel, number> = {
-  basic: 0.9,
-  standard: 1.0,
-  high_end: 1.2,
-};
-
-const clamp = (value: number, min: number, max: number) =>
-  Math.min(Math.max(value, min), max);
-
-const createRangeValue = (area: number, unitRate: number, finishFactor: number): RangeValue => {
-  const mid = area * unitRate * finishFactor;
+const createRangeValue = (
+  wallArea: number,
+  ceilingArea: number,
+  wallRate: number,
+  ceilingRate: number,
+  finishFactor: number,
+  wetAreaFactor: number,
+  lowFactor: number,
+  highFactor: number,
+): RangeValue => {
+  const mid =
+    (wallArea * wallRate + ceilingArea * ceilingRate) *
+    finishFactor *
+    wetAreaFactor;
 
   return {
-    low: mid * 0.9,
+    low: mid * lowFactor,
     mid,
-    high: mid * 1.15,
+    high: mid * highFactor,
   };
 };
 
@@ -79,32 +65,60 @@ export const getDefaultExternalWallLength = (floorAreaM2: number): number => {
 };
 
 export const calculateEstimate = (input: EstimateInput): EstimateResult => {
-  const external_wall_area =
-    input.external_wall_length_m * WALL_HEIGHT * STOREY_FACTOR;
+  const config = getConfig();
+  const externalWallArea =
+    input.external_wall_length_m *
+    config.building.wall_height *
+    config.building.storey_factor;
+  const baseInternalFactor = config.internalWallFactor[input.building_type];
+  const internalWallArea = externalWallArea * baseInternalFactor;
+  const wallArea = externalWallArea + internalWallArea;
+  const ceilingArea = input.floor_area_m2;
+  const totalLiningArea = wallArea + ceilingArea;
+  const finishFactor = config.finishFactor[input.finish_level];
+  const wetAreaFactor = config.wetAreaFactor[input.bathrooms];
 
-  const internal_wall_factor = clamp(
-    BASE_INTERNAL_FACTOR[input.building_type] + BATHROOM_ADJUSTMENT[input.bathrooms],
-    1.4,
-    2.2,
+  const gib = createRangeValue(
+    wallArea,
+    ceilingArea,
+    config.rates.gib_wall_rate,
+    config.rates.gib_ceiling_rate,
+    finishFactor,
+    wetAreaFactor,
+    config.range.low_factor,
+    config.range.high_factor,
+  );
+  const stopping = createRangeValue(
+    wallArea,
+    ceilingArea,
+    config.rates.stopping_wall_rate,
+    config.rates.stopping_ceiling_rate,
+    finishFactor,
+    wetAreaFactor,
+    config.range.low_factor,
+    config.range.high_factor,
+  );
+  const paint = createRangeValue(
+    wallArea,
+    ceilingArea,
+    config.rates.paint_wall_rate,
+    config.rates.paint_ceiling_rate,
+    finishFactor,
+    wetAreaFactor,
+    config.range.low_factor,
+    config.range.high_factor,
   );
 
-  const internal_wall_area = external_wall_area * internal_wall_factor;
-  const ceiling_area = input.floor_area_m2;
-  const total_lining_area = external_wall_area + internal_wall_area + ceiling_area;
-  const finishFactor = FINISH_FACTOR[input.finish_level];
-
-  const gib = createRangeValue(total_lining_area, UNIT_RATES.gib, finishFactor);
-  const stopping = createRangeValue(total_lining_area, UNIT_RATES.stopping, finishFactor);
-  const paint = createRangeValue(total_lining_area, UNIT_RATES.paint, finishFactor);
-
   return {
-    wall_height: WALL_HEIGHT,
-    storey_factor: STOREY_FACTOR,
-    external_wall_area,
-    internal_wall_factor,
-    internal_wall_area,
-    ceiling_area,
-    total_lining_area,
+    wallHeight: config.building.wall_height,
+    storeyFactor: config.building.storey_factor,
+    baseInternalFactor,
+    wetAreaFactor,
+    externalWallArea,
+    internalWallArea,
+    wallArea,
+    ceilingArea,
+    totalLiningArea,
     gib,
     stopping,
     paint,

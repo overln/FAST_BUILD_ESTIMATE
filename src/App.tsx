@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import Settings from './pages/Settings';
 import {
   calculateEstimate,
   getDefaultExternalWallLength,
@@ -6,6 +7,8 @@ import {
   type BuildingType,
   type FinishLevel,
 } from './utils/calculation';
+
+type ViewMode = 'estimate' | 'settings';
 
 type FormState = {
   floor_area_m2: number;
@@ -30,6 +33,8 @@ const formatCurrency = (value: number) =>
   }).format(value);
 
 export default function App() {
+  const [viewMode, setViewMode] = useState<ViewMode>('estimate');
+  const [, setConfigVersion] = useState(0);
   const [form, setForm] = useState<FormState>(() => {
     const floorArea = 120;
 
@@ -41,22 +46,55 @@ export default function App() {
       finish_level: 'standard',
     };
   });
+  const [isExternalWallLengthManual, setIsExternalWallLengthManual] = useState(false);
 
   useEffect(() => {
-    setForm((current) => ({
-      ...current,
-      external_wall_length_m: getDefaultExternalWallLength(current.floor_area_m2),
-    }));
-  }, [form.floor_area_m2]);
+    if (isExternalWallLengthManual) {
+      return;
+    }
+
+    setForm((current) => {
+      const nextExternalWallLength = getDefaultExternalWallLength(current.floor_area_m2);
+
+      if (current.external_wall_length_m === nextExternalWallLength) {
+        return current;
+      }
+
+      return {
+        ...current,
+        external_wall_length_m: nextExternalWallLength,
+      };
+    });
+  }, [form.floor_area_m2, isExternalWallLengthManual]);
 
   const result = calculateEstimate(form);
+
+  if (viewMode === 'settings') {
+    return (
+      <div className="app-shell">
+        <Settings
+          onBack={() => setViewMode('estimate')}
+          onConfigChange={() => setConfigVersion((current) => current + 1)}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="app-shell">
       <div className="app-card">
         <section className="panel panel-form">
           <div>
-            <p className="eyebrow">FAST_BUILD_ESTIMATE</p>
+            <div className="panel-topline">
+              <p className="eyebrow">FAST_BUILD_ESTIMATE</p>
+              <button
+                type="button"
+                className="button button-secondary"
+                onClick={() => setViewMode('settings')}
+              >
+                Settings
+              </button>
+            </div>
             <h1>Residential Interior Estimate Tool</h1>
             <p className="panel-copy">
               Front-end only estimator for lining, stopping, and paint ranges.
@@ -87,14 +125,19 @@ export default function App() {
                 min="0"
                 step="0.1"
                 value={form.external_wall_length_m}
-                onChange={(event) =>
+                onChange={(event) => {
+                  setIsExternalWallLengthManual(true);
                   setForm((current) => ({
                     ...current,
                     external_wall_length_m: Number(event.target.value) || 0,
-                  }))
-                }
+                  }));
+                }}
               />
             </label>
+
+            <p className="panel-copy">
+              Default external wall length: {formatNumber(getDefaultExternalWallLength(form.floor_area_m2))} m
+            </p>
 
             <label className="field">
               <span>building_type</span>
@@ -152,25 +195,28 @@ export default function App() {
         <section className="panel panel-result">
           <div className="result-header">
             <h2>Estimate Result</h2>
-            <p>Total lining area: {formatNumber(result.total_lining_area)} m2</p>
+            <p>
+              Wall area: {formatNumber(result.wallArea)} m2 | Ceiling area:{' '}
+              {formatNumber(result.ceilingArea)} m2
+            </p>
           </div>
 
           <div className="metric-grid">
             <div className="metric-card">
               <span>External wall area</span>
-              <strong>{formatNumber(result.external_wall_area)} m2</strong>
+              <strong>{formatNumber(result.externalWallArea)} m2</strong>
             </div>
             <div className="metric-card">
               <span>Internal wall area</span>
-              <strong>{formatNumber(result.internal_wall_area)} m2</strong>
+              <strong>{formatNumber(result.internalWallArea)} m2</strong>
+            </div>
+            <div className="metric-card">
+              <span>Total wall area</span>
+              <strong>{formatNumber(result.wallArea)} m2</strong>
             </div>
             <div className="metric-card">
               <span>Ceiling area</span>
-              <strong>{formatNumber(result.ceiling_area)} m2</strong>
-            </div>
-            <div className="metric-card">
-              <span>Internal wall factor</span>
-              <strong>{formatNumber(result.internal_wall_factor)}</strong>
+              <strong>{formatNumber(result.ceilingArea)} m2</strong>
             </div>
           </div>
 
