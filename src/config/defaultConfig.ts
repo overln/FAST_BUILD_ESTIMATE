@@ -1,61 +1,69 @@
-import type {
-  Bathrooms,
-  BuildingType,
-  FinishLevel,
-} from '../utils/calculation';
+import type { ExternalCornerType, FinishLevel } from '../utils/calculation';
+
+export interface RateTriple {
+  low: number;
+  mid: number;
+  high: number;
+}
 
 export interface AppConfig {
-  building: {
-    wall_height: number;
-    storey_factor: number;
+  /** Wall area = floor_area × wallFactor[finish_level] */
+  wallFactor: Record<FinishLevel, number>;
+  /** Paint area = (wall_area + ceiling_area) × paintFactor[finish_level] */
+  paintFactor: Record<FinishLevel, number>;
+  fixing: {
+    intertenancy_multiplier: number;
   };
-  internalWallFactor: Record<BuildingType, number>;
+  stoppingBreakdown: {
+    /** square_stop_length = floor_area × square_stop_factor (lm/m2) */
+    square_stop_factor: number;
+    /** external_corner_length = floor_area × external_corner_factor (lm/m2) */
+    external_corner_factor: number;
+  };
+  externalCorner: {
+    default_type: ExternalCornerType;
+    /** Extra $/lm added to corner mid rate when type = premium */
+    premium_add_rate: number;
+  };
+  /** Direct unit rates ($/m2 or $/lm) — low / mid / high */
   rates: {
-    gib_wall_rate: number;
-    gib_ceiling_rate: number;
-    stopping_wall_rate: number;
-    stopping_ceiling_rate: number;
-    paint_wall_rate: number;
-    paint_ceiling_rate: number;
-  };
-  finishFactor: Record<FinishLevel, number>;
-  wetAreaFactor: Record<Bathrooms, number>;
-  range: {
-    low_factor: number;
-    high_factor: number;
+    fixing: RateTriple;
+    stopping: RateTriple;
+    squareStop: RateTriple;
+    corner: RateTriple;
+    paint: RateTriple;
+    render: RateTriple;
   };
 }
 
 export const defaultConfig: AppConfig = {
-  building: {
-    wall_height: 2.4,
-    storey_factor: 1.5,
+  wallFactor: {
+    simple: 2.5,
+    standard: 2.65,
+    complex: 2.85,
   },
-  internalWallFactor: {
-    detached_house: 1.6,
-    townhouse: 1.8,
-    duplex: 1.7,
+  paintFactor: {
+    simple: 1.1,
+    standard: 1.14,
+    complex: 1.2,
+  },
+  fixing: {
+    intertenancy_multiplier: 1.12,
+  },
+  stoppingBreakdown: {
+    square_stop_factor: 1,
+    external_corner_factor: 0.3,
+  },
+  externalCorner: {
+    default_type: 'standard',
+    premium_add_rate: 5,
   },
   rates: {
-    gib_wall_rate: 32,
-    gib_ceiling_rate: 32,
-    stopping_wall_rate: 12,
-    stopping_ceiling_rate: 12,
-    paint_wall_rate: 22,
-    paint_ceiling_rate: 22,
-  },
-  finishFactor: {
-    basic: 0.9,
-    standard: 1.0,
-    high_end: 1.2,
-  },
-  wetAreaFactor: {
-    '1': 1.0,
-    '2': 1.03,
-    '3_plus': 1.06,
-  },
-  range: {
-    low_factor: 0.9,
-    high_factor: 1.15,
+    fixing:    { low: 10, mid: 14, high: 18 },
+    stopping:  { low: 14, mid: 19, high: 28 },
+    squareStop:{ low: 8,  mid: 10, high: 14 },
+    corner:    { low: 18, mid: 25, high: 32 },
+    paint:     { low: 14, mid: 18, high: 26 },
+    render:    { low: 15, mid: 18, high: 25 },
   },
 };

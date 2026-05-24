@@ -69,6 +69,36 @@ select {
   flex-wrap: wrap;
 }
 
+.topline-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.locale-switch {
+  display: inline-flex;
+  padding: 4px;
+  border-radius: 999px;
+  background: #e9f0fb;
+  gap: 4px;
+}
+
+.locale-button {
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: #24498e;
+  padding: 8px 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.locale-button-active {
+  background: #2b5db7;
+  color: #fff;
+}
+
 .eyebrow {
   margin: 0 0 8px;
   color: #2b5db7;
@@ -113,6 +143,11 @@ h2 {
   color: #31415f;
 }
 
+.field small {
+  color: #66758f;
+  font-size: 0.84rem;
+}
+
 .field input,
 .field select {
   width: 100%;
@@ -148,6 +183,53 @@ h2 {
 
 .button:hover {
   filter: brightness(0.98);
+}
+
+.preset-grid {
+  display: grid;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.preset-card {
+  display: grid;
+  gap: 6px;
+  width: 100%;
+  border: 1px solid #d7e3f1;
+  border-radius: 18px;
+  background: #fff;
+  color: #172033;
+  padding: 16px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.preset-card span {
+  color: #66758f;
+  font-size: 0.9rem;
+}
+
+.preset-card-active {
+  border-color: #2b5db7;
+  box-shadow: 0 0 0 4px rgba(43, 93, 183, 0.1);
+}
+
+.summary-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 18px;
+  color: #53627a;
+}
+
+.pdf-preview {
+  max-height: 280px;
+  overflow: auto;
+  white-space: pre-wrap;
+  border: 1px solid #d7e3f1;
+  border-radius: 18px;
+  background: #f8fbff;
+  color: #53627a;
+  padding: 16px;
 }
 
 .panel-result {
@@ -265,4 +347,43 @@ th {
   .metric-grid {
     grid-template-columns: 1fr;
   }
+}
+
+/* Rate input inside settings table */
+.rate-input {
+  width: 72px;
+  border: 1px solid #d1dae8;
+  border-radius: 8px;
+  background: #fff;
+  padding: 6px 8px;
+  color: #172033;
+  font-size: 0.9rem;
+  text-align: right;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.rate-input:focus {
+  outline: none;
+  border-color: #2b5db7;
+  box-shadow: 0 0 0 3px rgba(43, 93, 183, 0.12);
+}
+
+.row-warn td {
+  background: #fff4e5;
+}
+
+.warn-note {
+  margin-top: 0.75rem;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: #fff4e5;
+  color: #8a4b00;
+  font-size: 0.88rem;
+}
+
+.extra-params {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin-top: 1rem;
 }
