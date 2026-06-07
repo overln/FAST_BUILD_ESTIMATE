@@ -1,0 +1,110 @@
+{
+  "profile": "balanced",
+  "wallFactor": {
+    "simple": 2.5,
+    "standard": 2.65,
+    "complex": 2.85
+  },
+  "paintFactor": {
+    "simple": 1.1,
+    "standard": 1.14,
+    "complex": 1.2
+  },
+  "fixing": {
+    "intertenancy_multiplier": 1.12
+  },
+  "stoppingBreakdown": {
+    "square_stop_factor": 1,
+    "external_corner_factor": 0.3
+  },
+  "externalCorner": {
+    "default_type": "standard",
+    "premium_add_rate": 5
+  },
+  "rates": {
+    "fixing_rate": 42,
+    "stopping_rate": 20,
+    "square_stop_rate": 9,
+    "corner_rate": 25,
+    "paint_rate": 19,
+    "render_rate": 18
+  },
+  "range": {
+    "low_factor": 0.85,
+    "high_factor": 1.6
+  },
+  "model": {
+    "finishMultipliers": {
+      "simple": {
+        "fixing": 0.95,
+        "stopping": 0.95,
+        "squareStop": 0.95,
+        "corner": 0.95,
+        "paint": 0.95,
+        "render": 1
+      },
+      "standard": {
+        "fixing": 1,
+        "stopping": 1,
+        "squareStop": 1,
+        "corner": 1,
+        "paint": 1,
+        "render": 1
+      },
+      "complex": {
+        "fixing": 1,
+        "stopping": 1.5,
+        "squareStop": 1.82,
+        "corner": 1,
+        "paint": 1.124,
+        "render": 1
+      }
+    },
+    "areaBands": [
+      {
+        "max_floor_area": 99.99,
+        "fixing": 1,
+        "stopping": 1,
+        "squareStop": 1,
+        "corner": 1,
+        "paint": 1,
+        "render": 1
+      },
+      {
+        "max_floor_area": 149.99,
+        "fixing": 1,
+        "stopping": 1,
+        "squareStop": 1,
+        "corner": 1,
+        "paint": 1,
+        "render": 1
+      },
+      {
+        "max_floor_area": 199.99,
+        "fixing": 1,
+        "stopping": 1,
+        "squareStop": 1,
+        "corner": 1,
+        "paint": 1,
+        "render": 1
+      },
+      {
+        "max_floor_area": null,
+        "fixing": 1,
+        "stopping": 1,
+        "squareStop": 1,
+        "corner": 1,
+        "paint": 1,
+        "render": 1
+      }
+    ],
+    "minimums": {
+      "fixing": 0,
+      "stopping": 0,
+      "squareStop": 0,
+      "corner": 0,
+      "paint": 0,
+      "render": 690
+    }
+  }
+}

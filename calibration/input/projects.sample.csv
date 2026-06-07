@@ -1,0 +1,4 @@
+project_name,floor_area,finish_level,intertenancy_wall,external_corner_type,render_area,actual_wall_area,actual_paint_area,actual_fixing_area,actual_square_stop_length,actual_external_corner_length,actual_fixing,actual_stopping,actual_square_stop,actual_corner,actual_paint,actual_render,actual_total,proposal_total,include_fixing,include_stopping,include_square_stop,include_corner,include_paint,include_render
+Makora Ave - Dan Allison,231,complex,no,standard,0,552.00,762.00,765.00,235.00,40.00,21581.00,9767.00,2115.00,1748.00,11864.00,,47181.00,72975.00,yes,yes,yes,yes,yes,no
+41D Tiri View Road - Dash Build,130,complex,no,premium,3,351.99,506.00,,119.99,238.42,,11031.00,1680.00,6257.00,12502.00,690.00,32160.00,65955.00,no,yes,yes,yes,yes,yes
+394 East Coast Road Unit 3 - New Boots & Partner Ltd,144,standard,no,standard,0,426.60,403.87,474.62,113.78,20.00,19600.68,7608.00,1024.00,748.00,11098.00,,40078.68,47850.85,yes,yes,yes,yes,yes,no
