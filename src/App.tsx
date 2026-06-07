@@ -229,15 +229,15 @@ export default function App() {
               <strong>{formatNumber(result.fixingArea)} m2</strong>
             </div>
             <div className="metric-card">
-              <span>{locale === 'zh' ? '批荡面积 stopping area' : 'Stopping area'}</span>
+              <span>{locale === 'zh' ? '批灰面积 stopping area' : 'Stopping area'}</span>
               <strong>{formatNumber(result.stoppingArea)} m2</strong>
             </div>
             <div className="metric-card">
-              <span>{locale === 'zh' ? '直角收口长度' : 'Square stop length'}</span>
+              <span>{locale === 'zh' ? '天花角长度' : 'Square stop length'}</span>
               <strong>{formatNumber(result.squareStopLength)} lm</strong>
             </div>
             <div className="metric-card">
-              <span>{locale === 'zh' ? '外角长度' : 'External corner length'}</span>
+              <span>{locale === 'zh' ? '铁条长度' : 'Slimline/Arch bead length'}</span>
               <strong>{formatNumber(result.externalCornerLength)} lm</strong>
             </div>
             <div className="metric-card">
@@ -252,7 +252,7 @@ export default function App() {
 
           <div className="result-header">
             <p>
-              {locale === 'zh' ? '外角类型' : 'External corner'}:{' '}
+              {locale === 'zh' ? '铁条类型' : 'Slimline/Arch bead'}:{' '}
               {fieldOptionLabels.corner[locale][result.externalCornerType]}
               {result.cornerPremiumAdd > 0
                 ? ` | +${formatCurrency(result.cornerPremiumAdd)} ${locale === 'zh' ? '/米 premium 加价' : '/lm premium uplift'}`
@@ -285,19 +285,19 @@ export default function App() {
                   <td>{formatCurrency(result.fixing.high)}</td>
                 </tr>
                 <tr>
-                  <td>{locale === 'zh' ? '批荡' : 'stopping'}</td>
+                  <td>{locale === 'zh' ? '批灰' : 'stopping'}</td>
                   <td>{formatCurrency(result.stopping.low)}</td>
                   <td>{formatCurrency(result.stopping.mid)}</td>
                   <td>{formatCurrency(result.stopping.high)}</td>
                 </tr>
                 <tr>
-                  <td>{locale === 'zh' ? '直角收口' : 'square stop'}</td>
+                  <td>{locale === 'zh' ? '天花角' : 'square stop'}</td>
                   <td>{formatCurrency(result.squareStop.low)}</td>
                   <td>{formatCurrency(result.squareStop.mid)}</td>
                   <td>{formatCurrency(result.squareStop.high)}</td>
                 </tr>
                 <tr>
-                  <td>{locale === 'zh' ? '外角' : 'external corner'}</td>
+                  <td>{locale === 'zh' ? '铁条' : 'slimline/Arch bead'}</td>
                   <td>{formatCurrency(result.corner.low)}</td>
                   <td>{formatCurrency(result.corner.mid)}</td>
                   <td>{formatCurrency(result.corner.high)}</td>

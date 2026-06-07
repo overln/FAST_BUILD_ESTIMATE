@@ -28,10 +28,10 @@ type RateKey = keyof AppConfig['rates'];
 
 const rateRows: { key: RateKey; labelZh: string; labelEn: string; unit: string }[] = [
   { key: 'fixing',     labelZh: '定板 fixing',          labelEn: 'fixing',          unit: '$/m²' },
-  { key: 'stopping',   labelZh: '批荡 stopping',         labelEn: 'stopping',        unit: '$/m²' },
+  { key: 'stopping',   labelZh: '批灰 stopping',         labelEn: 'stopping',        unit: '$/m²' },
   { key: 'paint',      labelZh: '油漆 paint',            labelEn: 'paint',           unit: '$/m²' },
-  { key: 'squareStop', labelZh: '直角收口 square stop',   labelEn: 'square stop',     unit: '$/lm' },
-  { key: 'corner',     labelZh: '外角 external corner',   labelEn: 'external corner', unit: '$/lm' },
+  { key: 'squareStop', labelZh: '天花角 square stop',   labelEn: 'square stop',     unit: '$/lm' },
+  { key: 'corner',     labelZh: '铁条 external corner',   labelEn: 'slimline/Arch bead', unit: '$/lm' },
   { key: 'render',     labelZh: 'Render',                labelEn: 'render',          unit: '$/m²' },
 ];
 
@@ -210,7 +210,7 @@ export default function Settings({ locale, onLocaleChange, onBack, onConfigChang
           ) : null}
           <div className="extra-params">
             <label className="field">
-              <span>{locale === 'zh' ? '直角收口长度系数 (lm/m²)' : 'Square stop factor (lm/m²)'}</span>
+              <span>{locale === 'zh' ? '天花角长度系数 (lm/m²)' : 'Square stop factor (lm/m²)'}</span>
               <small>
                 {locale === 'zh'
                   ? 'square_stop_length = floor_area × 此系数'
@@ -225,7 +225,7 @@ export default function Settings({ locale, onLocaleChange, onBack, onConfigChang
               />
             </label>
             <label className="field">
-              <span>{locale === 'zh' ? '外角长度系数 (lm/m²)' : 'External corner factor (lm/m²)'}</span>
+              <span>{locale === 'zh' ? '铁条长度系数 (lm/m²)' : 'Slimline/Arch bead factor (lm/m²)'}</span>
               <small>
                 {locale === 'zh'
                   ? 'external_corner_length = floor_area × 此系数'
@@ -240,7 +240,7 @@ export default function Settings({ locale, onLocaleChange, onBack, onConfigChang
               />
             </label>
             <label className="field">
-              <span>{locale === 'zh' ? '外角 premium 加价 ($/lm)' : 'Premium uplift ($/lm)'}</span>
+              <span>{locale === 'zh' ? '铁条 premium 加价 ($/lm)' : 'Premium uplift ($/lm)'}</span>
               <small>
                 {locale === 'zh'
                   ? '选择 premium 时，加在 corner low/mid/high 单价之上'
@@ -304,7 +304,7 @@ export default function Settings({ locale, onLocaleChange, onBack, onConfigChang
               <p>Fixing: {formatCurrency(pdfSummary.fixing)}</p>
               <p>Stopping: {formatCurrency(pdfSummary.stopping)}</p>
               <p>Square stop: {formatCurrency(pdfSummary.squareStop)}</p>
-              <p>External corner: {formatCurrency(pdfSummary.corner)}</p>
+              <p>Slimline/Arch bead: {formatCurrency(pdfSummary.corner)}</p>
               <p>Paint: {formatCurrency(pdfSummary.paint)}</p>
               <p>Render: {formatCurrency(pdfSummary.render)}</p>
             </div>
